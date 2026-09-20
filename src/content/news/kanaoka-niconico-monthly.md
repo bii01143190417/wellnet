@@ -4,6 +4,7 @@ date: 2026-09-01
 category: "にこにこひろば"
 excerpt: "未就学児とご家族向けの運動あそび広場「金岡にこにこひろば」、今月の開催のお知らせです。"
 image: "../../assets/photos/kosodate/niconico/2.jpg"
+programSlug: "niconico"
 ---
 
 未就学児のお子さんとご家族を対象にした、自由参加の運動あそび広場「金岡にこにこひろば」を今月も開催します。

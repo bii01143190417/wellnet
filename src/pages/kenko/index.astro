@@ -3,6 +3,16 @@ import Layout from '../../layouts/Layout.astro';
 import ProgramDetail from '../../components/ProgramDetail.astro';
 import PhotoGallery from '../../components/PhotoGallery.astro';
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const allNews = await getCollection('news');
+function newsFor(programSlug: string) {
+  return allNews
+    .filter((post) => post.data.programSlug === programSlug)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, 3)
+    .map((post) => ({ id: post.id, title: post.data.title, date: post.data.date }));
+}
 
 import heroPhoto from '../../assets/photos/kenko/hero.jpg';
 
@@ -51,6 +61,7 @@ const kidsFamilyPhotos = [kidsFamily1, kidsFamily2, kidsFamily3, kidsFamily4, ki
       venue="金岡公園体育館(〒591-8025 堺市北区長曽根町1179-18)"
       instructor="阪本裕野(ACSM認定)"
       note="予約不要、当日参加OKです。写真は準備中です。"
+      latestNews={newsFor('active-fit')}
     />
 
     <ProgramDetail
@@ -60,6 +71,7 @@ const kidsFamilyPhotos = [kidsFamily1, kidsFamily2, kidsFamily3, kidsFamily4, ki
       schedule="毎年秋に開催"
       venue="大泉緑地"
       note="次回(2026年)の開催日程は「お知らせ」でご案内します。"
+      latestNews={newsFor('lalala-run')}
     >
       <PhotoGallery photos={runPhotos} alt="走ろうラララRun!" />
     </ProgramDetail>
@@ -69,6 +81,7 @@ const kidsFamilyPhotos = [kidsFamily1, kidsFamily2, kidsFamily3, kidsFamily4, ki
       name="あつまれ!!夏Kids♪"
       tagline="運動を楽しもう。できてもできなくても楽しい時間を。子育てファミリーさん・小学生の子どもたち、みなさんのご参加をお待ちしています！"
       note="①ファミリーフィットネス(未就学児とご家族向け、定員25家族、1家族1,000円) ②キッズフィット&ダンス(小学1〜6年生向け、3日間プログラム、2,000円・最終日にミニ発表会あり)の2プログラムで構成しています。"
+      latestNews={newsFor('natsukids')}
     >
       <p class="sub-label">①ファミリーフィットネス</p>
       <PhotoGallery photos={kidsFamilyPhotos} alt="あつまれ夏Kids ファミリーフィットネス" />

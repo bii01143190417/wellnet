@@ -10,6 +10,7 @@ const news = defineCollection({
       category: z.string(),
       excerpt: z.string(),
       image: image().optional(),
+      programSlug: z.string().optional(),
     }),
 });
 

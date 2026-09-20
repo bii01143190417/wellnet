@@ -1,4 +1,10 @@
 ---
+interface NewsLink {
+  id: string;
+  title: string;
+  date: Date;
+}
+
 interface Props {
   badge: string;
   name: string;
@@ -9,9 +15,12 @@ interface Props {
   venue?: string;
   instructor?: string;
   note?: string;
+  latestNews?: NewsLink[];
 }
 
-const { badge, name, tagline, target, schedule, cost, venue, instructor, note } = Astro.props;
+const { badge, name, tagline, target, schedule, cost, venue, instructor, note, latestNews } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
 
 const rows = [
   { label: '対象', value: target },
@@ -38,6 +47,22 @@ const rows = [
     </dl>
   )}
   {note && <p class="program-note">{note}</p>}
+  {latestNews && latestNews.length > 0 && (
+    <div class="program-news">
+      <p class="program-news-heading">最新のお知らせ</p>
+      <ul>
+        {latestNews.map((post) => (
+          <li>
+            <a href={`/news/${post.id}/`}>
+              <span class="program-news-date">{formatter.format(post.date)}</span>
+              {post.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="program-news-all" href="/news/">お知らせ一覧をすべて見る →</a>
+    </div>
+  )}
   <slot />
 </article>
 
@@ -102,6 +127,49 @@ const rows = [
     color: var(--color-ink-muted);
     border-left: 3px solid var(--color-surface);
     padding-left: 12px;
+  }
+  .program-news {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--color-surface);
+    border-radius: 14px;
+  }
+  .program-news-heading {
+    margin: 0 0 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+  }
+  .program-news ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .program-news a {
+    text-decoration: none;
+    color: var(--color-ink);
+    font-size: 0.86rem;
+  }
+  .program-news a:hover {
+    text-decoration: underline;
+  }
+  .program-news-date {
+    color: var(--color-ink-muted);
+    font-size: 0.78rem;
+    margin-right: 8px;
+  }
+  .program-news-all {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    text-decoration: none;
+  }
+  .program-news-all:hover {
+    text-decoration: underline;
   }
   @media (max-width: 480px) {
     .program-rows {

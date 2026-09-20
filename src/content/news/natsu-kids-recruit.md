@@ -4,6 +4,7 @@ date: 2026-06-01
 category: "あつまれ夏Kids♪"
 excerpt: "子育てファミリーさんと小学生の子どもたち向けの夏休みイベント「あつまれ!!夏Kids♪」の参加者を募集します。"
 image: "../../assets/photos/kenko/natsukids-family/1.jpg"
+programSlug: "natsukids"
 ---
 
 運動を楽しもう。できてもできなくても楽しい時間を。子育てファミリーさん・小学生の子どもたち、みなさんのご参加をお待ちしています！

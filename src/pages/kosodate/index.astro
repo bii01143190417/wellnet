@@ -3,6 +3,16 @@ import Layout from '../../layouts/Layout.astro';
 import ProgramDetail from '../../components/ProgramDetail.astro';
 import PhotoGallery from '../../components/PhotoGallery.astro';
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const allNews = await getCollection('news');
+function newsFor(programSlug: string) {
+  return allNews
+    .filter((post) => post.data.programSlug === programSlug)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, 3)
+    .map((post) => ({ id: post.id, title: post.data.title, date: post.data.date }));
+}
 
 import heroPhoto from '../../assets/photos/kosodate/hero.jpg';
 
@@ -56,6 +66,7 @@ const oneDayPhotos = [oneDay1, oneDay2, oneDay3, oneDay4];
       cost="500円(1家族)"
       venue="金岡公園体育館(〒591-8025 堺市北区長曽根町1179-18)"
       note="事前予約は不要ですが、初めてご参加の方は無料の登録が必要です。開催状況はX(旧Twitter) @m_wellnet でもお知らせしています。2023年度までは家原大池体育館(17年間)で開催し、2024年度より金岡公園体育館に移転しました。"
+      latestNews={newsFor('niconico')}
     >
       <PhotoGallery photos={niconicoPhotos} alt="金岡にこにこひろば" />
     </ProgramDetail>
@@ -67,6 +78,7 @@ const oneDayPhotos = [oneDay1, oneDay2, oneDay3, oneDay4];
       target="就学前の子どもたちと保護者"
       venue="堺市金岡公園体育館(小体育室)ほか"
       note="開催日・定員・参加費は開催回ごとに「お知らせ」でご案内します(直近回は定員25家族・1家族1,000円で実施)。"
+      latestNews={newsFor('family-fit')}
     >
       <PhotoGallery photos={familyFitPhotos} alt="ファミリーFit" />
     </ProgramDetail>
@@ -80,6 +92,7 @@ const oneDayPhotos = [oneDay1, oneDay2, oneDay3, oneDay4];
       cost="年会費 8,400円"
       venue="堺市立鴨谷体育館(第3体育室)(〒590-0138 堺市南区鴨谷台2丁4-1)"
       instructor="阪本裕野・伊藤めぐ美"
+      latestNews={newsFor('mamafit-club')}
     >
       <PhotoGallery photos={mamafitPhotos} alt="ママフィットくらぶ" />
     </ProgramDetail>
@@ -93,6 +106,7 @@ const oneDayPhotos = [oneDay1, oneDay2, oneDay3, oneDay4];
       cost="1レッスン 1,000円"
       venue="堺市立人権ふれあいセンター(多目的室)(〒590-0822 堺市堺区協和町2-61-1)"
       instructor="阪本裕野"
+      latestNews={newsFor('mamafit7')}
     />
 
     <ProgramDetail
@@ -100,6 +114,7 @@ const oneDayPhotos = [oneDay1, oneDay2, oneDay3, oneDay4];
       name="One dayパパママフィットくらぶ"
       tagline="トランポリンやバランスボールを使った、パパもママも一緒に楽しめる親子フィットネス。不定期開催です。"
       note="開催予定は決まり次第「お知らせ」でご案内します。"
+      latestNews={newsFor('one-day-papamama')}
     >
       <PhotoGallery photos={oneDayPhotos} alt="One dayパパママフィットくらぶ" />
     </ProgramDetail>
