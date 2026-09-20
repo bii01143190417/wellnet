@@ -1,0 +1,222 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getImage } from 'astro:assets';
+import niconicoPhoto from '../assets/photos/home/niconico.jpg';
+import mamafitPhoto from '../assets/photos/home/mamafit.jpg';
+
+const niconicoOptimized = await getImage({ src: niconicoPhoto, width: 360, height: 480, format: 'webp' });
+const mamafitOptimized = await getImage({ src: mamafitPhoto, width: 360, height: 480, format: 'webp' });
+
+const heroSlides = [
+  { src: niconicoOptimized.src, caption: '「人と人とがつながり合う楽しい場」を — 金岡にこにこひろば' },
+  { src: mamafitOptimized.src, caption: '「がんばらなくてもよい自分自身を見つめる場」を — ママフィットくらぶ' },
+  { src: '/images/hero-placeholder-3.svg', caption: 'できてもできなくても楽しい運動の場を — アクティブフィット(写真準備中)' },
+];
+
+const programs = [
+  {
+    badge: '遊',
+    name: '金岡にこにこひろば',
+    desc: '未就学児とご家族向け、自由参加の運動あそび広場。月1回、金岡公園体育館にて。',
+  },
+  {
+    badge: '整',
+    name: 'ママフィットくらぶ',
+    desc: 'お子さま連れで参加できるママのフィットネス。ヨガ・ピラティスで心と体を整えます。',
+  },
+  {
+    badge: '汗',
+    name: 'アクティブフィット',
+    desc: '18歳以上対象、高強度の有酸素運動と筋トレで汗を流す金曜夜のクラス。',
+  },
+];
+---
+<Layout
+  title="みんなのWell.net【堺で運動するなら】"
+  description="堺市を拠点に、子育て支援と健康づくりを通じて地域とつながるNPO法人 みんなのWell.net の公式サイトです。"
+>
+  <section class="hero">
+    <div class="hero-blob" aria-hidden="true"></div>
+    <div class="container hero-row">
+      <div class="hero-copy">
+        <span class="hero-badge">堺市 / 特定非営利活動法人</span>
+        <h1>すべての人達に<br />笑顔と元気を発信します</h1>
+        <p>堺市を拠点に、子育て支援と健康づくりを通じて地域とつながるNPO法人です。</p>
+        <a class="cta" href="/about/">活動をみる</a>
+      </div>
+      <div class="hero-photo">
+        <img id="hero-cycle-img" src={heroSlides[0].src} alt={heroSlides[0].caption} width="360" height="480" />
+        <p id="hero-cycle-caption" class="hero-caption">{heroSlides[0].caption}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="programs container" aria-label="主な活動">
+    {programs.map((p) => (
+      <article class="card">
+        <div class="card-badge" aria-hidden="true">{p.badge}</div>
+        <h2>{p.name}</h2>
+        <p>{p.desc}</p>
+      </article>
+    ))}
+  </section>
+
+  <script define:vars={{ heroSlides }}>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReducedMotion && heroSlides.length > 1) {
+      const img = document.getElementById('hero-cycle-img');
+      const caption = document.getElementById('hero-cycle-caption');
+      let index = 0;
+      setInterval(() => {
+        index = (index + 1) % heroSlides.length;
+        img.classList.add('is-fading');
+        caption.classList.add('is-fading');
+        setTimeout(() => {
+          img.src = heroSlides[index].src;
+          img.alt = heroSlides[index].caption;
+          caption.textContent = heroSlides[index].caption;
+          img.classList.remove('is-fading');
+          caption.classList.remove('is-fading');
+        }, 450);
+      }, 4500);
+    }
+  </script>
+
+  <style>
+    .hero {
+      position: relative;
+      padding: 48px 0 64px;
+      overflow: hidden;
+    }
+    .hero-blob {
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+      background: linear-gradient(135deg, var(--color-primary), #ffb088);
+      opacity: 0.16;
+      top: -160px;
+      right: -120px;
+    }
+    .hero-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+    .hero-copy {
+      flex: 1 1 480px;
+      max-width: 560px;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      background: var(--color-surface);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+    .hero-copy h1 {
+      font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem);
+      font-weight: 700;
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
+    .hero-copy p {
+      color: var(--color-ink-muted);
+      font-size: 1rem;
+      margin: 0 0 28px;
+    }
+    .cta {
+      display: inline-block;
+      background: var(--color-primary-dark);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 14px 32px;
+      border-radius: 999px;
+      box-shadow: 0 10px 22px rgba(255, 122, 77, 0.32);
+    }
+    .hero-photo {
+      flex: 0 0 auto;
+      width: 280px;
+      position: relative;
+    }
+    .hero-photo img {
+      border-radius: 24px;
+      transition: opacity 0.45s ease;
+      opacity: 1;
+    }
+    .hero-photo img.is-fading {
+      opacity: 0;
+    }
+    .hero-caption {
+      margin: 10px 4px 0;
+      font-size: 0.8rem;
+      color: var(--color-ink-muted);
+      line-height: 1.5;
+      min-height: 2.4em;
+      transition: opacity 0.45s ease;
+      opacity: 1;
+    }
+    .hero-caption.is-fading {
+      opacity: 0;
+    }
+    @media (max-width: 720px) {
+      .hero-row {
+        flex-direction: column;
+      }
+      .hero-photo {
+        width: 60%;
+        max-width: 260px;
+        align-self: flex-start;
+      }
+    }
+
+    .programs {
+      padding: 8px 24px 56px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
+    }
+    .card-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--color-primary-dark);
+      margin-bottom: 16px;
+    }
+    .card:nth-child(2) .card-badge {
+      background: var(--color-accent-text);
+    }
+    .card:nth-child(3) .card-badge {
+      background: #ffb088;
+      color: #6b3d1f;
+    }
+    .card h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+    .card p {
+      font-size: 0.88rem;
+      color: var(--color-ink-muted);
+      margin: 0;
+    }
+  </style>
+</Layout>

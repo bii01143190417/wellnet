@@ -1,0 +1,246 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const businesses = [
+  '子育てファミリーの交流・居場所づくり(障がいのあるお子さんも含む)',
+  '市民スポーツ・健康づくりの推進',
+  '運動指導者の育成研修',
+  'スポーツ・健康分野の公的受託事業',
+  'スポーツイベントの企画・運営支援',
+];
+
+const overview = [
+  { label: '名称', value: '特定非営利活動法人 みんなのWell.net' },
+  { label: '設立', value: '2006年に任意団体として活動を開始、2008年10月27日にNPO法人として認証' },
+  { label: '所在地', value: '〒590-0025 大阪府堺市堺区向陵東町1丁2番2号 アミューズマンションむさしⅡ203号' },
+  { label: 'TEL', value: '090-1226-9028' },
+];
+
+const board = [
+  { role: '代表理事', name: '阪本裕野', note: '健康運動指導士 / ACSM認定 / 中高保健体育教員' },
+  { role: '理事', name: '森永裕美', note: '健康運動指導士' },
+  { role: '理事', name: '栩野智代', note: '中高保健体育教員 / ノルディックウォーキング指導者' },
+  { role: '理事', name: '小田康子', note: '中高保健体育教員' },
+  { role: '監事', name: '中井昭雄', note: '' },
+];
+
+const documents = ['定款', '2025年度 事業報告', '2025年度 財務報告'];
+---
+<Layout
+  title="団体紹介 | みんなのWell.net"
+  description="特定非営利活動法人 みんなのWell.net の理念・事業内容・役員紹介です。堺市を拠点に子育て支援と健康づくりに取り組んでいます。"
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="page-badge">団体紹介</span>
+      <h1>すべての人達に<br />笑顔と元気を発信します</h1>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="mission-card">
+      <p class="mission-line">「人と人とがつながり合う楽しい場」</p>
+      <p class="mission-line">「がんばらなくてもよい自分自身を見つめる場」</p>
+    </div>
+  </section>
+
+  <section class="container section">
+    <h2 class="section-title">事業内容</h2>
+    <ul class="business-list">
+      {businesses.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <section class="container section">
+    <h2 class="section-title">団体概要</h2>
+    <dl class="overview-table">
+      {overview.map((row) => (
+        <>
+          <dt>{row.label}</dt>
+          <dd>{row.value}</dd>
+        </>
+      ))}
+    </dl>
+  </section>
+
+  <section class="container section">
+    <h2 class="section-title">役員紹介</h2>
+    <ul class="board-list">
+      {board.map((person) => (
+        <li>
+          <span class="board-role">{person.role}</span>
+          <span class="board-name">{person.name}</span>
+          {person.note && <span class="board-note">{person.note}</span>}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container section">
+    <h2 class="section-title">関連資料</h2>
+    <p class="docs-note">資料ファイルは準備中です。届き次第、こちらから閲覧・ダウンロードできるようにします。</p>
+    <ul class="docs-list">
+      {documents.map((doc) => (
+        <li>
+          <span class="docs-icon" aria-hidden="true">📄</span>
+          {doc}
+          <span class="docs-status">準備中</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <style>
+    .page-hero {
+      position: relative;
+      padding: 44px 0 36px;
+    }
+    .page-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      background: var(--color-surface);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .section {
+      padding: 32px 24px;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0 0 20px;
+    }
+
+    .mission-card {
+      background: var(--color-surface);
+      border-radius: 20px;
+      padding: 32px;
+      text-align: center;
+    }
+    .mission-line {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      margin: 0 0 8px;
+    }
+    .mission-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .business-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .business-list li {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
+      font-size: 0.94rem;
+    }
+
+    .overview-table {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 14px 20px;
+      margin: 0;
+    }
+    .overview-table dt {
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      font-size: 0.9rem;
+    }
+    .overview-table dd {
+      margin: 0;
+      font-size: 0.94rem;
+      color: var(--color-ink);
+    }
+    @media (max-width: 560px) {
+      .overview-table {
+        grid-template-columns: 1fr;
+        gap: 4px 0;
+      }
+      .overview-table dd {
+        margin-bottom: 8px;
+      }
+    }
+
+    .board-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .board-list li {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 20px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .board-role {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--color-primary-dark);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .board-name {
+      font-weight: 700;
+      font-size: 0.98rem;
+    }
+    .board-note {
+      color: var(--color-ink-muted);
+      font-size: 0.84rem;
+    }
+
+    .docs-note {
+      color: var(--color-ink-muted);
+      font-size: 0.88rem;
+      margin: 0 0 16px;
+    }
+    .docs-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .docs-list li {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 20px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.94rem;
+    }
+    .docs-status {
+      margin-left: auto;
+      font-size: 0.78rem;
+      color: var(--color-ink-muted);
+      background: var(--color-surface);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+  </style>
+</Layout>

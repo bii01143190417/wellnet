@@ -1,0 +1,158 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProgramDetail from '../../components/ProgramDetail.astro';
+import PhotoGallery from '../../components/PhotoGallery.astro';
+import { Image } from 'astro:assets';
+
+import heroPhoto from '../../assets/photos/kosodate/hero.jpg';
+
+import niconico1 from '../../assets/photos/kosodate/niconico/1.jpg';
+import niconico2 from '../../assets/photos/kosodate/niconico/2.jpg';
+import niconico3 from '../../assets/photos/kosodate/niconico/3.jpg';
+import niconico4 from '../../assets/photos/kosodate/niconico/4.jpg';
+import niconico5 from '../../assets/photos/kosodate/niconico/5.jpg';
+const niconicoPhotos = [niconico1, niconico2, niconico3, niconico4, niconico5];
+
+import familyFit1 from '../../assets/photos/kosodate/family-fit/1.jpg';
+import familyFit2 from '../../assets/photos/kosodate/family-fit/2.jpg';
+import familyFit3 from '../../assets/photos/kosodate/family-fit/3.jpg';
+import familyFit4 from '../../assets/photos/kosodate/family-fit/4.jpg';
+import familyFit5 from '../../assets/photos/kosodate/family-fit/5.jpg';
+import familyFit6 from '../../assets/photos/kosodate/family-fit/6.jpg';
+const familyFitPhotos = [familyFit1, familyFit2, familyFit3, familyFit4, familyFit5, familyFit6];
+
+import mamafit1 from '../../assets/photos/kosodate/mamafit-club/1.jpg';
+import mamafit2 from '../../assets/photos/kosodate/mamafit-club/2.jpg';
+import mamafit3 from '../../assets/photos/kosodate/mamafit-club/3.jpg';
+import mamafit4 from '../../assets/photos/kosodate/mamafit-club/4.jpg';
+const mamafitPhotos = [mamafit1, mamafit2, mamafit3, mamafit4];
+
+import oneDay1 from '../../assets/photos/kosodate/one-day/1.jpg';
+import oneDay2 from '../../assets/photos/kosodate/one-day/2.jpg';
+import oneDay3 from '../../assets/photos/kosodate/one-day/3.jpg';
+import oneDay4 from '../../assets/photos/kosodate/one-day/4.jpg';
+const oneDayPhotos = [oneDay1, oneDay2, oneDay3, oneDay4];
+---
+<Layout
+  title="子育て支援事業 | みんなのWell.net"
+  description="金岡にこにこひろば・ファミリーFit・ママフィットくらぶなど、みんなのWell.netの子育て支援プログラムをご紹介します。"
+>
+  <section class="page-hero">
+    <Image class="hero-photo" src={heroPhoto} alt="子育て支援事業の活動の様子" width={1200} height={480} />
+    <div class="container hero-copy-wrap">
+      <span class="page-badge">子育て支援事業</span>
+      <h1>子育てファミリーの<br />交流と居場所づくり</h1>
+      <p class="page-lead">未就学児のお子さんとご家族から、更年期世代の女性まで。世代に合わせた運動あそび・フィットネスの場をご用意しています。</p>
+    </div>
+  </section>
+
+  <section class="container section">
+    <ProgramDetail
+      badge="遊"
+      name="金岡にこにこひろば"
+      tagline="未就学児とご家族向け、自由参加の運動あそび広場。ボールやマット、体操あそびに加え、11時からはリズム体操・ふれあい遊び・保護者向けミニフィットネス・絵本の時間もあります。"
+      target="未就学児とそのご家族"
+      schedule="月1回 9:45〜11:45"
+      cost="500円(1家族)"
+      venue="金岡公園体育館(〒591-8025 堺市北区長曽根町1179-18)"
+      note="事前予約は不要ですが、初めてご参加の方は無料の登録が必要です。開催状況はX(旧Twitter) @m_wellnet でもお知らせしています。2023年度までは家原大池体育館(17年間)で開催し、2024年度より金岡公園体育館に移転しました。"
+    >
+      <PhotoGallery photos={niconicoPhotos} alt="金岡にこにこひろば" />
+    </ProgramDetail>
+
+    <ProgramDetail
+      badge="育"
+      name="ファミリーFit"
+      tagline="トランポリンやバランスボールを使った親子の運動あそびに、軽い託児付きの保護者フィットネスタイムを組み合わせたプログラムです。"
+      target="就学前の子どもたちと保護者"
+      venue="堺市金岡公園体育館(小体育室)ほか"
+      note="開催日・定員・参加費は開催回ごとに「お知らせ」でご案内します(直近回は定員25家族・1家族1,000円で実施)。"
+    >
+      <PhotoGallery photos={familyFitPhotos} alt="ファミリーFit" />
+    </ProgramDetail>
+
+    <ProgramDetail
+      badge="整"
+      name="ママフィットくらぶ"
+      tagline="お子さま連れで参加できるママのフィットネス。ヨガ・ピラティスなどのボディワークで、姿勢や心身を整えます。コアラ組・ウサギ組の2クラス制です。"
+      target="お子さま連れの保護者"
+      schedule="月1回 月曜日 10:15〜11:15(〜11:45は自由遊び) / 年度制(4月〜3月、年12回)"
+      cost="年会費 8,400円"
+      venue="堺市立鴨谷体育館(第3体育室)(〒590-0138 堺市南区鴨谷台2丁4-1)"
+      instructor="阪本裕野・伊藤めぐ美"
+    >
+      <PhotoGallery photos={mamafitPhotos} alt="ママフィットくらぶ" />
+    </ProgramDetail>
+
+    <ProgramDetail
+      badge="美"
+      name="ママフィット7"
+      tagline="子どもの手が少し離れた方から更年期世代の女性に向けてのフィットネス。いつまでも「私らしく」・・・そして「心も体も健康に」。"
+      target="更年期世代の女性"
+      schedule="毎月第1・第3木曜日 10:15〜11:30"
+      cost="1レッスン 1,000円"
+      venue="堺市立人権ふれあいセンター(多目的室)(〒590-0822 堺市堺区協和町2-61-1)"
+      instructor="阪本裕野"
+    />
+
+    <ProgramDetail
+      badge="日"
+      name="One dayパパママフィットくらぶ"
+      tagline="トランポリンやバランスボールを使った、パパもママも一緒に楽しめる親子フィットネス。不定期開催です。"
+      note="開催予定は決まり次第「お知らせ」でご案内します。"
+    >
+      <PhotoGallery photos={oneDayPhotos} alt="One dayパパママフィットくらぶ" />
+    </ProgramDetail>
+  </section>
+
+  <style>
+    .page-hero {
+      position: relative;
+    }
+    .page-hero :global(.hero-photo) {
+      width: 100%;
+      height: clamp(220px, 32vw, 360px);
+      object-fit: cover;
+      display: block;
+    }
+    .hero-copy-wrap {
+      position: relative;
+      margin-top: -64px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 28px 28px 8px;
+      box-shadow: 0 8px 24px rgba(58, 51, 44, 0.1);
+    }
+    .page-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      background: var(--color-surface);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+      font-weight: 700;
+      margin: 0 0 14px;
+      line-height: 1.5;
+    }
+    .page-lead {
+      color: var(--color-ink-muted);
+      font-size: 0.95rem;
+      max-width: 640px;
+      margin: 0 0 20px;
+    }
+    .section {
+      padding: 40px 24px 48px;
+    }
+    @media (max-width: 640px) {
+      .hero-copy-wrap {
+        margin-top: -40px;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</Layout>

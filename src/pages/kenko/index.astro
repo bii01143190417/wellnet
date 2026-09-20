@@ -1,0 +1,136 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProgramDetail from '../../components/ProgramDetail.astro';
+import PhotoGallery from '../../components/PhotoGallery.astro';
+import { Image } from 'astro:assets';
+
+import heroPhoto from '../../assets/photos/kenko/hero.jpg';
+
+import run1 from '../../assets/photos/kenko/lalala-run/1.jpg';
+import run2 from '../../assets/photos/kenko/lalala-run/2.jpg';
+import run3 from '../../assets/photos/kenko/lalala-run/3.jpg';
+import run4 from '../../assets/photos/kenko/lalala-run/4.jpg';
+import run5 from '../../assets/photos/kenko/lalala-run/5.jpg';
+const runPhotos = [run1, run2, run3, run4, run5];
+
+import kidsFit1 from '../../assets/photos/kenko/natsukids-fit/1.jpg';
+import kidsFit2 from '../../assets/photos/kenko/natsukids-fit/2.jpg';
+import kidsFit3 from '../../assets/photos/kenko/natsukids-fit/3.jpg';
+import kidsFit4 from '../../assets/photos/kenko/natsukids-fit/4.jpg';
+import kidsFit5 from '../../assets/photos/kenko/natsukids-fit/5.jpg';
+const kidsFitPhotos = [kidsFit1, kidsFit2, kidsFit3, kidsFit4, kidsFit5];
+
+import kidsFamily1 from '../../assets/photos/kenko/natsukids-family/1.jpg';
+import kidsFamily2 from '../../assets/photos/kenko/natsukids-family/2.jpg';
+import kidsFamily3 from '../../assets/photos/kenko/natsukids-family/3.jpg';
+import kidsFamily4 from '../../assets/photos/kenko/natsukids-family/4.jpg';
+import kidsFamily5 from '../../assets/photos/kenko/natsukids-family/5.jpg';
+const kidsFamilyPhotos = [kidsFamily1, kidsFamily2, kidsFamily3, kidsFamily4, kidsFamily5];
+---
+<Layout
+  title="健康づくり推進事業 | みんなのWell.net"
+  description="アクティブフィット・走ろうラララRun!・あつまれ夏Kidsなど、みんなのWell.netの健康づくりプログラム・イベントをご紹介します。"
+>
+  <section class="page-hero">
+    <Image class="hero-photo" src={heroPhoto} alt="健康づくり推進事業の活動の様子" width={1200} height={480} />
+    <div class="container hero-copy-wrap">
+      <span class="page-badge">健康づくり推進事業</span>
+      <h1>汗を流す、体を動かす、<br />仲間とつながる。</h1>
+      <p class="page-lead">18歳以上の方のフィットネスクラスから、季節ごとのイベントまで。できてもできなくても楽しい運動の場をご用意しています。</p>
+    </div>
+  </section>
+
+  <section class="container section">
+    <ProgramDetail
+      badge="汗"
+      name="アクティブフィット"
+      tagline="ウォーミングアップ・ストレッチから、有酸素運動・筋力トレーニング・ステップエアロビクス・サーキットトレーニングまで。しっかり汗を流したい方向けのクラスです。"
+      target="18歳以上"
+      schedule="毎週金曜日 19:40〜20:50"
+      cost="1回 800円(初回は無料体験あり)"
+      venue="金岡公園体育館(〒591-8025 堺市北区長曽根町1179-18)"
+      instructor="阪本裕野(ACSM認定)"
+      note="予約不要、当日参加OKです。写真は準備中です。"
+    />
+
+    <ProgramDetail
+      badge="走"
+      name="走ろうラララRun!"
+      tagline="ジョギング・ノルディックウォーキングのイベントレッスンです。初心者の方から経験のある方まで楽しめます。秋空の下、一緒に運動しましょう！"
+      schedule="毎年秋に開催"
+      venue="大泉緑地"
+      note="次回(2026年)の開催日程は「お知らせ」でご案内します。"
+    >
+      <PhotoGallery photos={runPhotos} alt="走ろうラララRun!" />
+    </ProgramDetail>
+
+    <ProgramDetail
+      badge="夏"
+      name="あつまれ!!夏Kids♪"
+      tagline="運動を楽しもう。できてもできなくても楽しい時間を。子育てファミリーさん・小学生の子どもたち、みなさんのご参加をお待ちしています！"
+      note="①ファミリーフィットネス(未就学児とご家族向け、定員25家族、1家族1,000円) ②キッズフィット&ダンス(小学1〜6年生向け、3日間プログラム、2,000円・最終日にミニ発表会あり)の2プログラムで構成しています。"
+    >
+      <p class="sub-label">①ファミリーフィットネス</p>
+      <PhotoGallery photos={kidsFamilyPhotos} alt="あつまれ夏Kids ファミリーフィットネス" />
+      <p class="sub-label">②キッズフィット&amp;ダンス</p>
+      <PhotoGallery photos={kidsFitPhotos} alt="あつまれ夏Kids キッズフィット&ダンス" />
+    </ProgramDetail>
+  </section>
+
+  <style>
+    .page-hero {
+      position: relative;
+    }
+    .page-hero :global(.hero-photo) {
+      width: 100%;
+      height: clamp(220px, 32vw, 360px);
+      object-fit: cover;
+      display: block;
+    }
+    .hero-copy-wrap {
+      position: relative;
+      margin-top: -64px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 28px 28px 8px;
+      box-shadow: 0 8px 24px rgba(58, 51, 44, 0.1);
+    }
+    .page-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      background: var(--color-surface);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+      font-weight: 700;
+      margin: 0 0 14px;
+      line-height: 1.5;
+    }
+    .page-lead {
+      color: var(--color-ink-muted);
+      font-size: 0.95rem;
+      max-width: 640px;
+      margin: 0 0 20px;
+    }
+    .section {
+      padding: 40px 24px 48px;
+    }
+    .sub-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      margin: 16px 0 0;
+    }
+    @media (max-width: 640px) {
+      .hero-copy-wrap {
+        margin-top: -40px;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</Layout>

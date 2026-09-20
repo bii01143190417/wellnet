@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const nav = [
+  { label: '団体紹介', href: '/about/' },
+  { label: '子育て支援事業', href: '/kosodate/' },
+  { label: '健康づくり推進事業', href: '/kenko/' },
+  { label: 'お知らせ', href: '/news/' },
+  { label: 'お問い合わせ', href: '/contact/' },
+];
+---
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-row">
+        <a class="logo" href="/">みんなの<em>Well.net</em></a>
+        <nav class="nav-links">
+          {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <span>〒590-0025 大阪府堺市堺区向陵東町1丁2番2号</span>
+        <span>TEL 090-1226-9028</span>
+      </div>
+    </footer>
+
+    <style>
+      .site-header {
+        padding: 16px 0;
+      }
+      .nav-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .logo {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--color-primary-dark);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+      .logo em {
+        font-style: normal;
+        color: var(--color-ink);
+        font-weight: 500;
+        font-size: 0.85em;
+      }
+      .nav-links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--color-ink);
+        font-size: 0.88rem;
+        font-weight: 700;
+        padding: 9px 16px;
+        border-radius: 999px;
+        background: var(--color-surface);
+      }
+
+      .site-footer {
+        padding: 24px 0;
+        background: var(--color-surface);
+        font-size: 0.85rem;
+        color: var(--color-ink-muted);
+      }
+      .footer-row {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    </style>
+  </body>
+</html>

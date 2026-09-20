@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" role="img" aria-label="アクティブフィットの活動写真(準備中)">
+  <defs>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffcf9e"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+  </defs>
+  <rect width="360" height="480" rx="24" fill="url(#g3)"/>
+  <circle cx="180" cy="200" r="72" fill="#fff3ea" opacity="0.35"/>
+  <path d="M120 300 q60 -60 120 0 t120 0" stroke="#fff3ea" stroke-width="6" fill="none" opacity="0.5"/>
+  <text x="180" y="440" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#fff3ea">写真準備中(差し替え予定)</text>
+</svg>

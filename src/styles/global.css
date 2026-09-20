@@ -1,0 +1,54 @@
+/* デザイン: 案A「あたたかみ系 (Warm Community)」
+   出典: https://claude.ai/code/artifact/47fd9033-a049-4e72-b766-d7ee7495c126 */
+
+:root {
+  --color-primary: #ff7a4d;       /* 装飾(グラデーション/ぼかし)専用。文字色には使わない */
+  --color-primary-dark: #c2410c;  /* ボタン・リンク・バッジ文字。白背景で4.99:1 */
+  --color-accent: #6bbf7c;        /* 装飾専用 */
+  --color-accent-text: #2f7a41;   /* バッジ文字。白背景で5.09:1 */
+  --color-bg: #fffaf5;
+  --color-surface: #fff3ea;
+  --color-ink: #3a332c;
+  --color-ink-muted: #6d6257;     /* 背景に対し4.5:1以上を確保 */
+
+  --font-display: 'Quicksand', "Hiragino Maru Gothic ProN", sans-serif;
+  --font-body: "Hiragino Maru Gothic ProN", "BIZ UDGothic", "Yu Gothic Medium", "Yu Gothic", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.7;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
