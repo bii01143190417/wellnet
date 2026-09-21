@@ -12,7 +12,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.3.2"
+    "astro": "^7.3.2",
+    "pdf-lib": "^1.17.1"
   },
   "allowScripts": {
     "esbuild": true

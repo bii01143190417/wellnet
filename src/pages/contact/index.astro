@@ -15,10 +15,13 @@ import Layout from '../../layouts/Layout.astro';
 
   <section class="container section">
     <div class="form-card">
-      <p class="form-placeholder-title">お問い合わせフォーム(準備中)</p>
-      <p class="form-placeholder-desc">
-        Googleフォームを埋め込み予定です。フォームのURLが発行され次第、こちらに反映します。
-      </p>
+      <script src="https://sdk.form.run/js/v2/embed.js"></script>
+      <div
+        class="formrun-embed"
+        data-formrun-form="@fami-hiro-bdfSx6nU5tVvu9AUUdMr"
+        data-formrun-redirect="true"
+      >
+      </div>
     </div>
 
     <div class="contact-info">
@@ -63,22 +66,11 @@ import Layout from '../../layouts/Layout.astro';
       margin: 0 auto;
     }
     .form-card {
-      background: var(--color-surface);
-      border: 2px dashed #ffcfae;
+      background: #fff;
       border-radius: 20px;
-      padding: 40px 28px;
-      text-align: center;
+      padding: 28px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
       margin-bottom: 24px;
-    }
-    .form-placeholder-title {
-      font-weight: 700;
-      color: var(--color-primary-dark);
-      margin: 0 0 8px;
-    }
-    .form-placeholder-desc {
-      font-size: 0.88rem;
-      color: var(--color-ink-muted);
-      margin: 0;
     }
     .contact-info {
       background: #fff;

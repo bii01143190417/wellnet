@@ -1,0 +1,381 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+---
+<Layout
+  title="PDF結合ツール | みんなのWell.net"
+  description="複数のPDFファイルを1つに結合する内部ツールです。ファイルはブラウザの中だけで処理され、どこにもアップロードされません。"
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="page-badge">内部ツール</span>
+      <h1>PDF結合ツール</h1>
+      <p class="page-lead">
+        複数のPDFファイルを選んで、1つのPDFに結合できます。ファイルはこのページの中(お使いのパソコン)だけで処理され、
+        インターネット上のどこにもアップロードされません。
+      </p>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="tool-card">
+      <label class="file-drop" for="file-input">
+        <span class="file-drop-title">ここをクリックしてPDFを選択</span>
+        <span class="file-drop-desc">複数選択できます。1ページごとに別ファイルになっている場合も、下の一覧で1枚ずつ順番を入れ替えられます。</span>
+        <input type="file" id="file-input" accept="application/pdf" multiple />
+      </label>
+
+      <p class="list-caption">結合後の並び順(↑↓で1ページずつ入れ替えできます)</p>
+      <ol id="file-list" class="file-list"></ol>
+
+      <p id="empty-note" class="empty-note">まだファイルが選ばれていません。</p>
+      <p id="error-note" class="error-note" hidden></p>
+
+      <button id="merge-button" class="merge-button" disabled>結合してダウンロード</button>
+      <p id="status-note" class="status-note" hidden></p>
+    </div>
+  </section>
+
+  <script>
+    import { PDFDocument } from 'pdf-lib';
+
+    interface LoadedFile {
+      id: number;
+      file: File;
+      doc: PDFDocument;
+      pageCount: number;
+    }
+
+    interface PageItem {
+      id: number;
+      fileId: number;
+      fileName: string;
+      pageIndexInFile: number;
+    }
+
+    const loadedFiles = new Map<number, LoadedFile>();
+    let pages: PageItem[] = [];
+    let nextFileId = 0;
+    let nextPageId = 0;
+
+    const fileInput = document.getElementById('file-input') as HTMLInputElement;
+    const fileList = document.getElementById('file-list') as HTMLOListElement;
+    const emptyNote = document.getElementById('empty-note') as HTMLParagraphElement;
+    const errorNote = document.getElementById('error-note') as HTMLParagraphElement;
+    const mergeButton = document.getElementById('merge-button') as HTMLButtonElement;
+    const statusNote = document.getElementById('status-note') as HTMLParagraphElement;
+
+    function showError(message: string) {
+      errorNote.textContent = message;
+      errorNote.hidden = false;
+    }
+
+    function clearError() {
+      errorNote.hidden = true;
+      errorNote.textContent = '';
+    }
+
+    function render() {
+      fileList.innerHTML = '';
+      emptyNote.hidden = pages.length > 0;
+      mergeButton.disabled = pages.length < 2;
+
+      pages.forEach((page, index) => {
+        const loaded = loadedFiles.get(page.fileId);
+        const label =
+          loaded && loaded.pageCount > 1
+            ? `${page.fileName}(${page.pageIndexInFile + 1} / ${loaded.pageCount} ページ目)`
+            : page.fileName;
+
+        const li = document.createElement('li');
+        li.className = 'file-item';
+
+        const order = document.createElement('span');
+        order.className = 'page-order';
+        order.textContent = String(index + 1);
+
+        const name = document.createElement('span');
+        name.className = 'file-name';
+        name.textContent = label;
+
+        const controls = document.createElement('span');
+        controls.className = 'file-controls';
+
+        const upBtn = document.createElement('button');
+        upBtn.type = 'button';
+        upBtn.className = 'icon-button';
+        upBtn.textContent = '↑';
+        upBtn.disabled = index === 0;
+        upBtn.setAttribute('aria-label', `${label} を上に移動`);
+        upBtn.addEventListener('click', () => movePage(index, -1));
+
+        const downBtn = document.createElement('button');
+        downBtn.type = 'button';
+        downBtn.className = 'icon-button';
+        downBtn.textContent = '↓';
+        downBtn.disabled = index === pages.length - 1;
+        downBtn.setAttribute('aria-label', `${label} を下に移動`);
+        downBtn.addEventListener('click', () => movePage(index, 1));
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'icon-button remove';
+        removeBtn.textContent = '×';
+        removeBtn.setAttribute('aria-label', `${label} を削除`);
+        removeBtn.addEventListener('click', () => removePage(page.id));
+
+        controls.append(upBtn, downBtn, removeBtn);
+        li.append(order, name, controls);
+        fileList.append(li);
+      });
+    }
+
+    function movePage(index: number, direction: -1 | 1) {
+      const target = index + direction;
+      if (target < 0 || target >= pages.length) return;
+      [pages[index], pages[target]] = [pages[target], pages[index]];
+      render();
+    }
+
+    function removePage(id: number) {
+      const removed = pages.find((page) => page.id === id);
+      pages = pages.filter((page) => page.id !== id);
+      if (removed && !pages.some((page) => page.fileId === removed.fileId)) {
+        loadedFiles.delete(removed.fileId);
+      }
+      render();
+    }
+
+    fileInput.addEventListener('change', async () => {
+      clearError();
+      statusNote.hidden = true;
+      const files = fileInput.files;
+      if (!files) return;
+
+      for (const file of Array.from(files)) {
+        if (file.type !== 'application/pdf') {
+          showError(`「${file.name}」はPDFファイルではないため、追加できませんでした。`);
+          continue;
+        }
+        try {
+          const bytes = await file.arrayBuffer();
+          const doc = await PDFDocument.load(bytes);
+          const pageCount = doc.getPageCount();
+          const fileId = nextFileId++;
+          loadedFiles.set(fileId, { id: fileId, file, doc, pageCount });
+          for (let i = 0; i < pageCount; i++) {
+            pages.push({ id: nextPageId++, fileId, fileName: file.name, pageIndexInFile: i });
+          }
+        } catch {
+          showError(`「${file.name}」を読み込めませんでした。ファイルが壊れていないか確認してください。`);
+        }
+      }
+      fileInput.value = '';
+      render();
+    });
+
+    mergeButton.addEventListener('click', async () => {
+      clearError();
+      mergeButton.disabled = true;
+      statusNote.hidden = false;
+      statusNote.textContent = '結合しています…';
+
+      try {
+        const mergedPdf = await PDFDocument.create();
+        for (const page of pages) {
+          const loaded = loadedFiles.get(page.fileId);
+          if (!loaded) continue;
+          const [copiedPage] = await mergedPdf.copyPages(loaded.doc, [page.pageIndexInFile]);
+          mergedPdf.addPage(copiedPage);
+        }
+
+        const mergedBytes = await mergedPdf.save();
+        const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '結合済み.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        statusNote.textContent = '結合が完了し、ダウンロードしました。';
+      } catch (err) {
+        showError('結合中にエラーが発生しました。ファイルが壊れていないか確認してください。');
+        statusNote.hidden = true;
+        console.error(err);
+      } finally {
+        mergeButton.disabled = pages.length < 2;
+      }
+    });
+
+    render();
+  </script>
+
+  <style is:global>
+    /* is:global は必須: 一覧行(.file-item など)はJavaScriptで動的に生成しており、
+       Astroの通常のスコープ付きCSSでは適用されないため */
+    .page-hero {
+      padding: 44px 0 36px;
+    }
+    .page-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      background: var(--color-surface);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+    .page-lead {
+      color: var(--color-ink-muted);
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin: 0;
+    }
+    .section {
+      padding: 8px 24px 48px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .tool-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
+    }
+    .file-drop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      background: var(--color-surface);
+      border: 2px dashed #ffcfae;
+      border-radius: 16px;
+      padding: 32px 20px;
+      cursor: pointer;
+    }
+    .file-drop-title {
+      font-weight: 700;
+      color: var(--color-primary-dark);
+    }
+    .file-drop-desc {
+      font-size: 0.82rem;
+      color: var(--color-ink-muted);
+    }
+    .file-drop input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+    .list-caption {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      margin: 20px 0 8px;
+    }
+    .file-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--color-surface);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+    }
+    .page-order {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--color-primary-dark);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .file-name {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .file-controls {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .icon-button {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: none;
+      background: #fff;
+      color: var(--color-ink);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .icon-button:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+    .icon-button.remove {
+      color: var(--color-primary-dark);
+      font-weight: 700;
+    }
+    .empty-note {
+      color: var(--color-ink-muted);
+      font-size: 0.86rem;
+      margin: 16px 0 0;
+    }
+    .error-note {
+      color: #c2410c;
+      font-size: 0.86rem;
+      margin: 16px 0 0;
+      background: #fff3ea;
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .merge-button {
+      display: block;
+      width: 100%;
+      margin-top: 24px;
+      background: var(--color-primary-dark);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 14px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .merge-button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    .status-note {
+      text-align: center;
+      font-size: 0.86rem;
+      color: var(--color-ink-muted);
+      margin: 12px 0 0;
+    }
+  </style>
+</Layout>
