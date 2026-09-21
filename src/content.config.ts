@@ -1,33 +1,39 @@
 import { defineCollection, z } from 'astro:content';
 import type { Loader } from 'astro/loaders';
 
+async function* fetchAllMicroCmsContents(endpoint: string) {
+  const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
+  const apiKey = import.meta.env.MICROCMS_API_KEY;
+
+  if (!serviceDomain || !apiKey) {
+    throw new Error('MICROCMS_SERVICE_DOMAIN / MICROCMS_API_KEY が設定されていません。');
+  }
+
+  const limit = 100;
+  let offset = 0;
+  while (true) {
+    const res = await fetch(
+      `https://${serviceDomain}.microcms.io/api/v1/${endpoint}?limit=${limit}&offset=${offset}`,
+      { headers: { 'X-MICROCMS-API-KEY': apiKey } }
+    );
+    if (!res.ok) {
+      throw new Error(`microCMS ${endpoint} fetch failed: ${res.status} ${res.statusText}`);
+    }
+    const json = await res.json();
+    for (const item of json.contents) yield item;
+
+    offset += limit;
+    if (offset >= json.totalCount) break;
+  }
+}
+
 function microCmsNewsLoader(): Loader {
   return {
     name: 'microcms-news-loader',
     load: async ({ store, logger }) => {
-      const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
-      const apiKey = import.meta.env.MICROCMS_API_KEY;
-
-      if (!serviceDomain || !apiKey) {
-        logger.warn('MICROCMS_SERVICE_DOMAIN / MICROCMS_API_KEY が設定されていないため、お知らせを取得できません。');
-        return;
-      }
-
       store.clear();
-
-      const limit = 100;
-      let offset = 0;
-      while (true) {
-        const res = await fetch(
-          `https://${serviceDomain}.microcms.io/api/v1/news?limit=${limit}&offset=${offset}`,
-          { headers: { 'X-MICROCMS-API-KEY': apiKey } }
-        );
-        if (!res.ok) {
-          throw new Error(`microCMS news fetch failed: ${res.status} ${res.statusText}`);
-        }
-        const json = await res.json();
-
-        for (const item of json.contents) {
+      try {
+        for await (const item of fetchAllMicroCmsContents('news')) {
           store.set({
             id: item.id,
             data: {
@@ -41,9 +47,30 @@ function microCmsNewsLoader(): Loader {
             },
           });
         }
+      } catch (err) {
+        logger.warn(`お知らせを取得できませんでした: ${err}`);
+      }
+    },
+  };
+}
 
-        offset += limit;
-        if (offset >= json.totalCount) break;
+function microCmsDocumentsLoader(): Loader {
+  return {
+    name: 'microcms-documents-loader',
+    load: async ({ store, logger }) => {
+      store.clear();
+      try {
+        for await (const item of fetchAllMicroCmsContents('documents')) {
+          store.set({
+            id: item.id,
+            data: {
+              name: item.name,
+              url: item.file ?? '',
+            },
+          });
+        }
+      } catch (err) {
+        logger.warn(`資料を取得できませんでした: ${err}`);
       }
     },
   };
@@ -68,4 +95,12 @@ const news = defineCollection({
   }),
 });
 
-export const collections = { news };
+const documents = defineCollection({
+  loader: microCmsDocumentsLoader(),
+  schema: z.object({
+    name: z.string(),
+    url: z.string(),
+  }),
+});
+
+export const collections = { news, documents };

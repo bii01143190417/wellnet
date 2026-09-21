@@ -1,5 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const documents = await getCollection('documents');
 
 const businesses = [
   '子育てファミリーの交流・居場所づくり(障がいのあるお子さんも含む)',
@@ -24,7 +27,6 @@ const board = [
   { role: '監事', name: '中井昭雄', note: '' },
 ];
 
-const documents = ['定款', '2025年度 事業報告', '2025年度 財務報告'];
 ---
 <Layout
   title="団体紹介 | みんなのWell.net"
@@ -78,15 +80,21 @@ const documents = ['定款', '2025年度 事業報告', '2025年度 財務報告
 
   <section class="container section">
     <h2 class="section-title">関連資料</h2>
-    <p class="docs-note">資料ファイルは準備中です。届き次第、こちらから閲覧・ダウンロードできるようにします。</p>
     <ul class="docs-list">
-      {documents.map((doc) => (
-        <li>
-          <span class="docs-icon" aria-hidden="true">📄</span>
-          {doc}
-          <span class="docs-status">準備中</span>
-        </li>
-      ))}
+      {documents.map((doc) => {
+        const isReady = /^https?:\/\//.test(doc.data.url);
+        return (
+          <li>
+            <span class="docs-icon" aria-hidden="true">📄</span>
+            {isReady ? (
+              <a href={doc.data.url} target="_blank" rel="noopener noreferrer">{doc.data.name}</a>
+            ) : (
+              <span>{doc.data.name}</span>
+            )}
+            {!isReady && <span class="docs-status">準備中</span>}
+          </li>
+        );
+      })}
     </ul>
   </section>
 
@@ -233,6 +241,14 @@ const documents = ['定款', '2025年度 事業報告', '2025年度 財務報告
       align-items: center;
       gap: 10px;
       font-size: 0.94rem;
+    }
+    .docs-list li a {
+      color: var(--color-primary-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .docs-list li a:hover {
+      text-decoration: underline;
     }
     .docs-status {
       margin-left: auto;
