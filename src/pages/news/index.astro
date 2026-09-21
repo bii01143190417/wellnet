@@ -26,7 +26,7 @@ const formatter = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'lo
         <li>
           <a class="post-link" href={`/news/${post.id}/`}>
             {post.data.image && (
-              <Image class="post-thumb" src={post.data.image} alt="" width={320} height={200} />
+              <Image class="post-thumb" src={post.data.image.url} alt="" width={320} height={200} />
             )}
             <div class="post-text">
               <span class="post-category">{post.data.category}</span>
