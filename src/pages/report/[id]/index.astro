@@ -1,0 +1,91 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('report');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Layout title={`${post.data.title} | みんなのWell.net`} description={post.data.title}>
+  <section class="page-hero">
+    <div class="container">
+      <a class="back-link" href="/report/">← 活動報告一覧</a>
+      <h1>{post.data.title}</h1>
+      <p class="post-date">{formatter.format(post.data.date)}</p>
+    </div>
+  </section>
+
+  <section class="container section">
+    {post.data.images.length > 0 && (
+      <div class="post-gallery">
+        {post.data.images.map((image, i) => (
+          <Image src={image.url} alt={`${post.data.title}(写真${i + 1})`} width={320} height={240} />
+        ))}
+      </div>
+    )}
+    <div class="post-body" set:html={post.data.body} />
+  </section>
+
+  <style>
+    .page-hero {
+      padding: 44px 0 24px;
+    }
+    .back-link {
+      display: inline-block;
+      font-size: 0.85rem;
+      color: var(--color-primary-dark);
+      text-decoration: none;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.9rem);
+      font-weight: 700;
+      margin: 0 0 8px;
+      line-height: 1.5;
+    }
+    .post-date {
+      font-size: 0.85rem;
+      color: var(--color-ink-muted);
+      margin: 0;
+    }
+    .section {
+      padding: 8px 24px 48px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .post-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .post-gallery :global(img) {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+    .post-body {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
+      font-size: 0.95rem;
+      line-height: 1.9;
+    }
+    .post-body :global(strong) {
+      color: var(--color-primary-dark);
+    }
+  </style>
+</Layout>

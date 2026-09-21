@@ -103,4 +103,44 @@ const documents = defineCollection({
   }),
 });
 
-export const collections = { news, documents };
+function microCmsReportLoader(): Loader {
+  return {
+    name: 'microcms-report-loader',
+    load: async ({ store, logger }) => {
+      store.clear();
+      try {
+        for await (const item of fetchAllMicroCmsContents('report')) {
+          store.set({
+            id: item.id,
+            data: {
+              title: item.title,
+              date: new Date(item.date ?? item.publishedAt),
+              body: item.body ?? '',
+              images: item.images ?? [],
+            },
+          });
+        }
+      } catch (err) {
+        logger.warn(`活動報告を取得できませんでした: ${err}`);
+      }
+    },
+  };
+}
+
+const report = defineCollection({
+  loader: microCmsReportLoader(),
+  schema: z.object({
+    title: z.string(),
+    date: z.date(),
+    body: z.string(),
+    images: z.array(
+      z.object({
+        url: z.string(),
+        width: z.number(),
+        height: z.number(),
+      })
+    ),
+  }),
+});
+
+export const collections = { news, documents, report };
