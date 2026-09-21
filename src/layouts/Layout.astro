@@ -15,6 +15,13 @@ const nav = [
   { label: 'お知らせ', href: '/news/' },
   { label: 'お問い合わせ', href: '/contact/' },
 ];
+
+const footerNav = [
+  { label: '受託事業', href: '/trustee/' },
+  { label: '講座・講師派遣事業', href: '/kouza/' },
+  { label: '補助金・助成金事業', href: '/hojokin/' },
+  { label: '活動報告', href: '/report/' },
+];
 ---
 <html lang="ja">
   <head>
@@ -43,9 +50,14 @@ const nav = [
     </main>
 
     <footer class="site-footer">
-      <div class="container footer-row">
-        <span>〒590-0025 大阪府堺市堺区向陵東町1丁2番2号</span>
-        <span>TEL 090-1226-9028</span>
+      <div class="container">
+        <nav class="footer-nav">
+          {footerNav.map((item) => <a href={item.href}>{item.label}</a>)}
+        </nav>
+        <div class="footer-row">
+          <span>〒590-0025 大阪府堺市堺区向陵東町1丁2番2号</span>
+          <span>TEL 090-1226-9028</span>
+        </div>
       </div>
     </footer>
 
@@ -94,6 +106,22 @@ const nav = [
         background: var(--color-surface);
         font-size: 0.85rem;
         color: var(--color-ink-muted);
+      }
+      .footer-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #ffe3ce;
+      }
+      .footer-nav a {
+        color: var(--color-ink-muted);
+        text-decoration: none;
+        font-size: 0.8rem;
+      }
+      .footer-nav a:hover {
+        text-decoration: underline;
       }
       .footer-row {
         display: flex;

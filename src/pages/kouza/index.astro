@@ -1,0 +1,80 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="講座・講師派遣事業 | みんなのWell.net"
+  description="運動や運動あそびを通じた健康づくり・スポーツ活動・仲間づくりの現場に、講師派遣やイベントの企画・運営を承ります。"
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="page-badge">講座・講師派遣事業</span>
+      <h1>現場に合わせた<br />講師派遣・企画運営</h1>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="content-card">
+      <p>
+        運動や運動あそびをとおしての健康づくりやスポーツ活動、仲間づくりの現場に応じての講師派遣や、
+        イベントの企画・運営を承ります。
+      </p>
+      <p class="note">
+        内容・料金は現場ごとにご相談の上お見積りします。まずはお問い合わせください。
+      </p>
+      <a class="cta" href="/contact/">お問い合わせはこちら</a>
+    </div>
+  </section>
+
+  <style>
+    .page-hero {
+      padding: 44px 0 36px;
+    }
+    .page-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      background: var(--color-surface);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .section {
+      padding: 8px 24px 48px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .content-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 8px 20px rgba(58, 51, 44, 0.06);
+    }
+    .content-card p {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      margin: 0 0 16px;
+    }
+    .note {
+      color: var(--color-ink-muted);
+      font-size: 0.88rem;
+    }
+    .cta {
+      display: inline-block;
+      background: var(--color-primary-dark);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 12px 28px;
+      border-radius: 999px;
+      margin-top: 8px;
+    }
+  </style>
+</Layout>

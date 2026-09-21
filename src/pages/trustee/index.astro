@@ -1,0 +1,94 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProgramDetail from '../../components/ProgramDetail.astro';
+import PhotoGallery from '../../components/PhotoGallery.astro';
+
+import mall1 from '../../assets/photos/trustee/mall-walking/1.jpg';
+import mall2 from '../../assets/photos/trustee/mall-walking/2.jpg';
+import mall3 from '../../assets/photos/trustee/mall-walking/3.jpg';
+const mallPhotos = [mall1, mall2, mall3];
+
+import kanaoka1 from '../../assets/photos/trustee/kanaoka-kenko-up/1.jpg';
+import kanaoka2 from '../../assets/photos/trustee/kanaoka-kenko-up/2.jpg';
+const kanaokaPhotos = [kanaoka1, kanaoka2];
+
+import genki1 from '../../assets/photos/trustee/genki-up/1.jpg';
+const genkiPhotos = [genki1];
+---
+<Layout
+  title="受託事業 | みんなのWell.net"
+  description="Kanaoka健康アップ・イオンモール堺鉄砲町モールウォーキング・堺市げんきあっぷ教室など、みんなのWell.netの受託事業をご紹介します。"
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="page-badge">受託事業</span>
+      <h1>地域と連携した<br />健康づくりの取り組み</h1>
+      <p class="page-lead">自治体や商業施設と連携し、地域のみなさんの健康づくりをサポートしています。</p>
+    </div>
+  </section>
+
+  <section class="container section">
+    <ProgramDetail
+      badge="輪"
+      name="Kanaoka健康アップ"
+      tagline="つなげよう・広げよう！健康づくりの輪。エアロビクス・ピラティス・ヨガ・ストレッチなど、7つの教室を展開しています。"
+      cost="1回 700円(当日チケット購入)。教室ごとに初回無料体験あり"
+      instructor="阪本裕野(エアロビクス/コンディショニング)・大谷一穂(ピラティス)・山下美花(ストレッチ/コンディショニング)・上田ミナ(ヨガ)・寺西綾子(エアロビクス)・森永裕美(基礎エクササイズ)・YUKO TOMITA(ボディシェイプヨガ)"
+      note="持ち物: 運動できる服装・タオル・飲み物・室内シューズ"
+    >
+      <PhotoGallery photos={kanaokaPhotos} alt="Kanaoka健康アップ" />
+    </ProgramDetail>
+
+    <ProgramDetail
+      badge="歩"
+      name="イオンモール堺鉄砲町 モールウォーキング"
+      tagline="毎月 第2土曜日はモールを歩こう。屋内で天候を気にせず歩けるウォーキングイベントです。"
+      schedule="毎月第2土曜日"
+      cost="無料"
+      venue="イオンモール堺鉄砲町"
+    >
+      <PhotoGallery photos={mallPhotos} alt="イオンモール堺鉄砲町 モールウォーキング" />
+    </ProgramDetail>
+
+    <ProgramDetail
+      badge="健"
+      name="堺市げんきあっぷ教室"
+      tagline="元気なうちから介護予防！健康寿命を延ばしましょう。"
+      target="堺市在住で要介護認定を受けていない65歳以上の方"
+    >
+      <PhotoGallery photos={genkiPhotos} alt="堺市げんきあっぷ教室" />
+    </ProgramDetail>
+  </section>
+
+  <style>
+    .page-hero {
+      position: relative;
+      padding: 44px 0 36px;
+    }
+    .page-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      background: var(--color-surface);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+      font-weight: 700;
+      margin: 0 0 14px;
+      line-height: 1.5;
+    }
+    .page-lead {
+      color: var(--color-ink-muted);
+      font-size: 0.95rem;
+      max-width: 640px;
+      margin: 0;
+    }
+    .section {
+      padding: 8px 24px 48px;
+    }
+  </style>
+</Layout>
