@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../utils/url';
+
 interface NewsLink {
   id: string;
   title: string;
@@ -53,14 +55,14 @@ const rows = [
       <ul>
         {latestNews.map((post) => (
           <li>
-            <a href={`/news/${post.id}/`}>
+            <a href={withBase(`/news/${post.id}/`)}>
               <span class="program-news-date">{formatter.format(post.date)}</span>
               {post.title}
             </a>
           </li>
         ))}
       </ul>
-      <a class="program-news-all" href="/news/">お知らせ一覧をすべて見る →</a>
+      <a class="program-news-all" href={withBase('/news/')}>お知らせ一覧をすべて見る →</a>
     </div>
   )}
   <slot />

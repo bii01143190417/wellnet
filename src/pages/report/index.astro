@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { withBase } from '../../utils/url';
 
 const posts = (await getCollection('report')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -30,13 +31,13 @@ function excerptOf(html: string, length = 60) {
       <div class="empty-card">
         <p>活動の様子は現在準備中です。今しばらくお待ちください。</p>
         <p class="note">最新のイベント情報は「お知らせ」でご案内しています。</p>
-        <a class="cta" href="/news/">お知らせを見る</a>
+        <a class="cta" href={withBase('/news/')}>お知らせを見る</a>
       </div>
     ) : (
       <ul class="post-list">
         {posts.map((post) => (
           <li>
-            <a class="post-link" href={`/report/${post.id}/`}>
+            <a class="post-link" href={withBase(`/report/${post.id}/`)}>
               {post.data.images[0] && (
                 <Image class="post-thumb" src={post.data.images[0].url} alt="" width={320} height={200} />
               )}

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { withBase } from '../../utils/url';
 ---
 <Layout
   title="講座・講師派遣事業 | みんなのWell.net"
@@ -21,7 +22,7 @@ import Layout from '../../layouts/Layout.astro';
       <p class="note">
         内容・料金は現場ごとにご相談の上お見積りします。まずはお問い合わせください。
       </p>
-      <a class="cta" href="/contact/">お問い合わせはこちら</a>
+      <a class="cta" href={withBase('/contact/')}>お問い合わせはこちら</a>
     </div>
   </section>
 

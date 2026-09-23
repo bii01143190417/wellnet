@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { withBase } from '../../../utils/url';
 
 export async function getStaticPaths() {
   const posts = await getCollection('news');
@@ -18,7 +19,7 @@ const formatter = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'lo
 <Layout title={`${post.data.title} | みんなのWell.net`} description={post.data.excerpt}>
   <section class="page-hero">
     <div class="container">
-      <a class="back-link" href="/news/">← お知らせ一覧</a>
+      <a class="back-link" href={withBase('/news/')}>← お知らせ一覧</a>
       <span class="page-badge">{post.data.category}</span>
       <h1>{post.data.title}</h1>
       <p class="post-date">{formatter.format(post.data.date)}</p>

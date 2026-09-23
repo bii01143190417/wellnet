@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { withBase } from '../../utils/url';
 ---
 <Layout
   title="補助金・助成金事業 | みんなのWell.net"
@@ -20,7 +21,7 @@ import Layout from '../../layouts/Layout.astro';
       <p class="note">
         詳細は随時「お知らせ」にてご案内します。
       </p>
-      <a class="cta" href="/news/">お知らせを見る</a>
+      <a class="cta" href={withBase('/news/')}>お知らせを見る</a>
     </div>
   </section>
 
