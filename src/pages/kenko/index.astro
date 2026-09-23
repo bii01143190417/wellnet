@@ -16,6 +16,10 @@ function newsFor(programSlug: string) {
 
 import heroPhoto from '../../assets/photos/kenko/hero.jpg';
 
+import active1 from '../../assets/photos/trustee/kanaoka-kenko-up/1.jpg';
+import active2 from '../../assets/photos/trustee/kanaoka-kenko-up/2.jpg';
+const activePhotos = [active1, active2];
+
 import run1 from '../../assets/photos/kenko/lalala-run/1.jpg';
 import run2 from '../../assets/photos/kenko/lalala-run/2.jpg';
 import run3 from '../../assets/photos/kenko/lalala-run/3.jpg';
@@ -60,9 +64,11 @@ const kidsFamilyPhotos = [kidsFamily1, kidsFamily2, kidsFamily3, kidsFamily4, ki
       cost="1回 800円(初回は無料体験あり)"
       venue="金岡公園体育館(〒591-8025 堺市北区長曽根町1179-18)"
       instructor="阪本裕野(ACSM認定)"
-      note="予約不要、当日参加OKです。写真は準備中です。"
+      note="予約不要、当日参加OKです。※写真はKanaoka健康アップ(受託事業)のクラスの様子です。アクティブフィットの写真は準備中のため、雰囲気の近いものを仮に掲載しています。"
       latestNews={newsFor('active-fit')}
-    />
+    >
+      <PhotoGallery photos={activePhotos} alt="Kanaoka健康アップのクラスの様子(イメージ)" />
+    </ProgramDetail>
 
     <ProgramDetail
       badge="走"
