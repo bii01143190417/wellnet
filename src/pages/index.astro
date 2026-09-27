@@ -5,16 +5,26 @@ import { withBase } from '../utils/url';
 import niconicoPhoto from '../assets/photos/home/niconico.jpg';
 import mamafitPhoto from '../assets/photos/home/mamafit.jpg';
 import activePhoto from '../assets/photos/trustee/kanaoka-kenko-up/1.jpg';
+import parachutePhoto from '../assets/photos/kosodate/hero.jpg';
+import runPhoto from '../assets/photos/kenko/lalala-run/2.jpg';
+import kidsFitPhoto from '../assets/photos/kenko/natsukids-fit/2.jpg';
+import familyFitPhoto from '../assets/photos/kosodate/family-fit/1.jpg';
+import niconico3Photo from '../assets/photos/kosodate/niconico/3.jpg';
 
-const niconicoOptimized = await getImage({ src: niconicoPhoto, width: 360, height: 480, format: 'webp' });
-const mamafitOptimized = await getImage({ src: mamafitPhoto, width: 360, height: 480, format: 'webp' });
-const activeOptimized = await getImage({ src: activePhoto, width: 360, height: 480, format: 'webp' });
-
-const heroSlides = [
-  { src: niconicoOptimized.src, caption: '「人と人とがつながり合う楽しい場」を — 金岡にこにこひろば' },
-  { src: mamafitOptimized.src, caption: '「がんばらなくてもよい自分自身を見つめる場」を — ママフィットくらぶ' },
-  { src: activeOptimized.src, caption: 'できてもできなくても楽しい運動の場を — アクティブフィット(イメージ)' },
+const frameSources = [
+  niconicoPhoto,
+  mamafitPhoto,
+  parachutePhoto,
+  runPhoto,
+  activePhoto,
+  kidsFitPhoto,
+  familyFitPhoto,
+  niconico3Photo,
 ];
+const heroFrames = await Promise.all(
+  frameSources.map((src) => getImage({ src, width: 360, height: 480, format: 'webp' }))
+);
+const heroFrameSrcs = heroFrames.map((f) => f.src);
 
 const programs = [
   {
@@ -48,8 +58,8 @@ const programs = [
         <a class="cta" href={withBase('/about/')}>活動をみる</a>
       </div>
       <div class="hero-photo">
-        <img id="hero-cycle-img" src={heroSlides[0].src} alt={heroSlides[0].caption} width="360" height="480" />
-        <p id="hero-cycle-caption" class="hero-caption">{heroSlides[0].caption}</p>
+        <img id="hero-frame-img" src={heroFrameSrcs[0]} alt="活動の様子" width="360" height="480" />
+        <p class="hero-caption">活動の様子</p>
       </div>
     </div>
   </section>
@@ -64,24 +74,21 @@ const programs = [
     ))}
   </section>
 
-  <script define:vars={{ heroSlides }}>
+  <script define:vars={{ heroFrameSrcs }}>
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReducedMotion && heroSlides.length > 1) {
-      const img = document.getElementById('hero-cycle-img');
-      const caption = document.getElementById('hero-cycle-caption');
+    if (!prefersReducedMotion && heroFrameSrcs.length > 1) {
+      const img = document.getElementById('hero-frame-img');
+      // 静止画を連続で切り替える「コマ送り」演出。クロスフェードはせず、瞬時に切り替える。
+      const preload = heroFrameSrcs.map((src) => {
+        const im = new Image();
+        im.src = src;
+        return im;
+      });
       let index = 0;
       setInterval(() => {
-        index = (index + 1) % heroSlides.length;
-        img.classList.add('is-fading');
-        caption.classList.add('is-fading');
-        setTimeout(() => {
-          img.src = heroSlides[index].src;
-          img.alt = heroSlides[index].caption;
-          caption.textContent = heroSlides[index].caption;
-          img.classList.remove('is-fading');
-          caption.classList.remove('is-fading');
-        }, 450);
-      }, 4500);
+        index = (index + 1) % heroFrameSrcs.length;
+        img.src = heroFrameSrcs[index];
+      }, 550);
     }
   </script>
 
@@ -150,23 +157,12 @@ const programs = [
     }
     .hero-photo img {
       border-radius: 24px;
-      transition: opacity 0.45s ease;
-      opacity: 1;
-    }
-    .hero-photo img.is-fading {
-      opacity: 0;
     }
     .hero-caption {
       margin: 10px 4px 0;
       font-size: 0.8rem;
       color: var(--color-ink-muted);
       line-height: 1.5;
-      min-height: 2.4em;
-      transition: opacity 0.45s ease;
-      opacity: 1;
-    }
-    .hero-caption.is-fading {
-      opacity: 0;
     }
     @media (max-width: 720px) {
       .hero-row {
